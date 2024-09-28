@@ -18,13 +18,14 @@ function Shop() {
         })
             .then(responce => responce.json())
             .then(data => {
-                data.shop && setGoods(data.shop);
+                let cuttedData = data.shop.slice(0, 10)
+                cuttedData && setGoods(cuttedData);
                 setLoading(false)
             })
     },[])
 
     useEffect(function testFunction() {
-        console.log(goods[0])
+        console.log(goods)
     }, [loading])
 
 
