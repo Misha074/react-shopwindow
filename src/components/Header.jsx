@@ -4,7 +4,7 @@ function Header() {
     return (
         <nav className="indigo accent-2">
             <div className="nav-wrapper">
-                <a href="#" className="brand-logo">React shopwindow</a>
+                <a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ" className="brand-logo">React shopwindow</a>
                 <ul id="nav-mobile" className="right hide-on-med-and-down">
                 <li>
                         <a href="!#">Repo</a>

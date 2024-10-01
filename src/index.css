@@ -21,8 +21,31 @@ nav {
   padding: 1rem 0;
 }
 
-.cards {
+.goods {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
   gap: 1rem;
+}
+
+.good {
+  display: flex;
+  flex-direction: column;
+}
+
+.good__content {
+  flex-grow: 1;
+}
+
+.cart {
+  position: fixed;
+  top: 5rem;
+  right: 5rem;
+  z-index: 2;
+}
+
+@media (max-width: 767px) {
+  .cart {
+    bottom: 2.5rem;
+    top: unset;
+  }
 }
