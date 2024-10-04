@@ -1,9 +1,12 @@
-function Cart(props) {
-    const {quantity = 0} = props
-    return <div className="cart indigo accent-2 white-text">
+function Cart({quantity, busketWindowVisibilityToggler}) {
+    return <button
+        className="cart indigo accent-2 white-text"
+        type="button"
+        onClick={() => busketWindowVisibilityToggler()}
+    >
         <i className="material-icons">shopping_cart</i>
         {quantity ? <span className="cart__quantity">{quantity}</span> : null}
-    </div>
+    </button>
 }
 
-export {Cart}
+export { Cart }

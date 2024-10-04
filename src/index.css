@@ -41,6 +41,10 @@ nav {
   top: 5rem;
   right: 5rem;
   z-index: 2;
+  padding: 0.5rem;
+  border-radius: 50%;
+  height: 60px;
+  width: 60px;
 }
 
 @media (max-width: 767px) {
@@ -48,4 +52,30 @@ nav {
     bottom: 2.5rem;
     top: unset;
   }
+}
+
+.basket-window {
+  width: 50%;
+  border: 1px solid #536dfe;
+  padding: 1rem;
+}
+
+.basket-window__item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  border-bottom: 2px solid #536dfe;
+  position: relative;
+}
+
+.basket-window__item-buttons-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.basket-window__item-remove-button {
+  position: absolute;
+  top: 10px;
+  right: 0;
 }

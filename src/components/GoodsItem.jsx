@@ -7,6 +7,7 @@ function GoodItem({ good, addGood }) {
             <div className="good__content card-content">
                 <span className="good__title card-title">{good.displayName}</span>
                 <p>{good.displayDescription}</p>
+                <p>{good.price.regularPrice}</p>
             </div>
             <div className="good__action card-action">
                 <a href={`http://react-shop/good/${good.mainId}.com`}>Show more link</a>
