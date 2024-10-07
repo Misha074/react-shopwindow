@@ -16,6 +16,17 @@ nav {
   padding: 0 1rem;
 }
 
+button:hover {
+  background-color: rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+}
+
+button:focus {
+  outline: none;
+  background-color: #536dfe;
+  color: #fff;
+}
+
 .content {
   min-height: calc(100vh - 70px - 60px);
   padding: 1rem 0;
@@ -27,6 +38,8 @@ nav {
   gap: 1rem;
 }
 
+/* good */
+
 .good {
   display: flex;
   flex-direction: column;
@@ -35,6 +48,8 @@ nav {
 .good__content {
   flex-grow: 1;
 }
+
+/* cart */
 
 .cart {
   position: fixed;
@@ -54,10 +69,51 @@ nav {
   }
 }
 
+/* basket-window */
+
 .basket-window {
   width: 50%;
   border: 1px solid #536dfe;
   padding: 1rem;
+  position: relative;
+
+  animation: show 500ms ease-in-out;
+}
+
+.basket-window__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.basket-window__footer {
+  padding-top: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+
+.basket-winodw__title {
+  margin: 0;
+}
+
+.basket-window__close-button {
+  border: 1px solid #536dfe;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.basket-window__item-remove-button {
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .basket-window__item {
@@ -78,4 +134,20 @@ nav {
   position: absolute;
   top: 10px;
   right: 0;
+}
+
+@keyframes show {
+  from {
+    opacity: 0;
+    height: 0%;
+  }
+
+  to {
+    opacity: 1;
+    height: 100%;
+  }
+}
+
+.basket-window__price {
+  margin: 0;
 }

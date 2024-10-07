@@ -1,13 +1,11 @@
 import { useState, useEffect } from "react"
 import { API_URL } from '../config'
 
-import { Cart } from "./Cart"
-
 import { Preloader } from "./Preloader"
-
 import { GoodsList } from "./GoodsList"
-
+import { Cart } from "./Cart"
 import { BasketWindow } from "./BasketWindow"
+import { Alert } from "./Alert"
 
 
 function Shop() {
@@ -15,7 +13,8 @@ function Shop() {
     const [loading, setLoading] = useState([true])
     const [order, setOrder] = useState([])
     const [busketWindowVisibility, setBusketWindowVisibility] = useState(false)
-    // const [busketPrice, setBusketPrice] = useState(0)
+    const [busketTotalPrice, setBusketTotalPrice] = useState(0)
+    const [alertName, setAlertName] = useState('')
 
     useEffect(function getGoods() {
         fetch(API_URL, {
@@ -38,9 +37,10 @@ function Shop() {
         if (itemIndex === -1) {
             // Элемент не найден, добавляем новый с quantity = 1
             setOrder(prevOrder => {
-                const newItem = { ...item, quantity: 1 }; // Создаем новый элемент
+                let newItem = { ...item, quantity: 1 }; // Создаем новый элемент с числом товаров
+                newItem = { ...newItem, summPrice: newItem.quantity * newItem.price.regularPrice } // Добавляем ключ с ценой за данную позицию в зависимости от количества штук (пока 1 шт)
                 const newOrder = [...prevOrder, newItem]; // Создаем новый массив с добавленным элементом  
-                console.log(newOrder); // Здесь вы увидите обновленный массив - и по факту то что будет оказывается в order после завршения обновления состояния 
+                // console.log(newOrder); // Здесь вы увидите обновленный массив - и по факту то что будет оказывается в order после завршения обновления состояния 
                 return newOrder; // Возвращаем новый массив для обновления состояния  
             });
         } else {
@@ -48,18 +48,23 @@ function Shop() {
             setOrder(prevOrder => {
                 const newOrder = [...prevOrder]; // Копируем текущий массив
                 newOrder[itemIndex].quantity += 1; // Увеличиваем quantity существующего элемента на 1
+                newOrder[itemIndex].summPrice = newOrder[itemIndex].quantity * newOrder[itemIndex].price.regularPrice // пересчитываем цену на данную позицию в зависимости от количества штук
                 return newOrder; // Возвращаем новый массив для обновления состояния  
             });
         }
+        setAlertName(item.displayName)
+    }
+
+    const removeGood = (item) => {
+        const newOrder = order.filter(elem => elem.mainId !== item.mainId)
+        setOrder(newOrder)
     }
 
     const busketWindowVisibilityToggler = () => {
-        if (order.length !== 0) {
-            if (busketWindowVisibility === false) {
-                setBusketWindowVisibility(true)
-            }
-            else setBusketWindowVisibility(false)
+        if (busketWindowVisibility === false) {
+            setBusketWindowVisibility(true)
         }
+        else setBusketWindowVisibility(false)
     }
 
     const goodQuantityDecrease = (item) => {
@@ -70,6 +75,7 @@ function Shop() {
                 setOrder(prevOrder => {
                     const newOrder = [...prevOrder]; // Копируем текущий массив
                     newOrder[itemIndex].quantity -= 1; // Увеличиваем quantity существующего элемента на 1
+                    newOrder[itemIndex].summPrice = newOrder[itemIndex].quantity * newOrder[itemIndex].price.regularPrice // пересчитываем цену на данную позицию в зависимости от количества штук
                     return newOrder; // Возвращаем новый массив для обновления состояния  
                 });
             } else {
@@ -88,28 +94,57 @@ function Shop() {
             setOrder(prevOrder => {
                 const newOrder = [...prevOrder]; // Копируем текущий массив
                 newOrder[itemIndex].quantity += 1; // Увеличиваем quantity существующего элемента на 1
+                newOrder[itemIndex].summPrice = newOrder[itemIndex].quantity * newOrder[itemIndex].price.regularPrice // пересчитываем цену на данную позицию в зависимости от количества штук
                 return newOrder; // Возвращаем новый массив для обновления состояния  
             });
-
         }
     }
 
+    const closeAlert = () => {
+        setAlertName('')
+    }
 
+    useEffect(function calcPrice() {
+        let totalPrice = 0;
 
-    // useEffect(function testFunction() {
-    //     console.log(goods)
-    //     // eslint-disable-next-line react-hooks/exhaustive-deps
-    // }, [loading])
+        for (let i = 0; i < order.length; i++) {
+            totalPrice += order[i].summPrice;
+        }
+        setBusketTotalPrice(totalPrice);
+    }, [order])
+
+    useEffect(function isBusketEmpty() {
+        if (order.length === 0) {
+            setBusketWindowVisibility(false)
+        }
+    }, [order])
 
 
     return <main className="container content">
         {
-            busketWindowVisibility === false ? <></> : <BasketWindow order={order} goodQuantityDecrease={goodQuantityDecrease} goodQuantityIncrease={goodQuantityIncrease}/>
+            busketWindowVisibility === false ?
+                <></>
+                :
+                <BasketWindow
+                    busketWindowVisibilityToggler={busketWindowVisibilityToggler}
+                    order={order}
+                    goodQuantityDecrease={goodQuantityDecrease}
+                    goodQuantityIncrease={goodQuantityIncrease}
+                    removeGood={removeGood}
+                    busketTotalPrice={busketTotalPrice} />
         }
         <Cart quantity={order.length} busketWindowVisibilityToggler={busketWindowVisibilityToggler} />
         {
             loading === true ? <Preloader /> : <GoodsList addGood={addGood} goods={goods} />
         }
+
+        {
+            alertName === '' ?
+                <></>
+                :
+                <Alert name={alertName} closeAlert={closeAlert} />
+        }
+
     </main>
 }
 
